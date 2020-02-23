@@ -6,3 +6,19 @@ sed -i 's/\(had\)...../\1doop/g' data.txt
 #sed -i 's///g' file 模式：/\(same_str\)...../\1replace_str
 # 相同的子串需要括起来， 并且用右斜杠对左右括号做转义、然后用.....代表后面任何字符，其中，一个.表示一个字符,5个点表示5个字符。
 #最后在替换字符中，用1来表示匹配到的same_str，只是1要转移（不是普通的数字1，有特殊含义了），后面再接上要替换的字符串
+
+
+#将字符串定义为变量，替换变量
+#场景：像1中一样，很长的一串字符串，如果写在模式中被替换和替换的位置，会觉得很长，不方便，
+# 如果把字符串（same_str）和新字符串（replace_str）定义成变量放进去会好很多
+
+old_str='haddoop'
+new_str='HADDOOP'
+#sed -i 's/$old_str/$new_str/g' data.txt 这么写肯定替换不了
+#因为'' 单引号里看啥就是啥，看$old_str就是$old_str字符串而已，data.txt没有这个字符串肯定就不行
+sed -i "s/$old_str/$new_str/g" data.txt #(1)
+
+#如果非得用单引号，请采用--得+思维，给变量加上''
+sed -i 's/'$old_str'/'$new_str'/g' data.txt #(2)
+#(1)(2)还是有区别，前者把data.txt中，'haddoop' 的单引号去掉了，变成了'HADDOOP 后者没有去掉
+#实际预期是不应该去掉的
